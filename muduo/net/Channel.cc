@@ -79,7 +79,7 @@ void Channel::handleEvent(Timestamp receiveTime)
     handleEventWithGuard(receiveTime);
   }
 }
-
+//根据事件类型来回调函数
 void Channel::handleEventWithGuard(Timestamp receiveTime)
 {
   eventHandling_ = true;
@@ -104,7 +104,7 @@ void Channel::handleEventWithGuard(Timestamp receiveTime)
   }
   if (revents_ & (POLLIN | POLLPRI | POLLRDHUP))
   {
-    if (readCallback_) readCallback_(receiveTime);
+    if (readCallback_) readCallback_(receiveTime);//调用Acceptor::handleRead()
   }
   if (revents_ & POLLOUT)
   {

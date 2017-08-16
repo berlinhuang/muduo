@@ -326,8 +326,8 @@ void TcpConnection::connectEstablished()
   assert(state_ == kConnecting);
   setState(kConnected);
   channel_->tie(shared_from_this());
-  channel_->enableReading();
-
+  channel_->enableReading();//将该Channel加入到了Eventloop中 //将TcpConnection所对应的通道加入到Poller关注
+  //回调用户设置的函数   TcpServer::NewConnection()里面设置:conn->setConnectionCallback(connectionCallback_);
   connectionCallback_(shared_from_this());
 }
 

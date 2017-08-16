@@ -71,10 +71,11 @@ void TcpServer::start()
         boost::bind(&Acceptor::listen, get_pointer(acceptor_)));
   }
 }
-
+//newConnection在构造函数内将其注册给Acceptor
 void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
 {
   loop_->assertInLoopThread();
+  //1. 从threadpool中选一个eventloop
   EventLoop* ioLoop = threadPool_->getNextLoop();
   char buf[64];
   snprintf(buf, sizeof buf, "-%s#%d", ipPort_.c_str(), nextConnId_);
@@ -87,17 +88,20 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr)
   InetAddress localAddr(sockets::getLocalAddr(sockfd));
   // FIXME poll with zero timeout to double confirm the new connection
   // FIXME use make_shared if necessary
+  //2. 新建一个TcpConnection结构体管理这个连接
   TcpConnectionPtr conn(new TcpConnection(ioLoop,
                                           connName,
                                           sockfd,
                                           localAddr,
                                           peerAddr));
   connections_[connName] = conn;
+  //3. 设置连接的一些属性
   conn->setConnectionCallback(connectionCallback_);
   conn->setMessageCallback(messageCallback_);
   conn->setWriteCompleteCallback(writeCompleteCallback_);
   conn->setCloseCallback(
       boost::bind(&TcpServer::removeConnection, this, _1)); // FIXME: unsafe
+  //4. 将连接加入到1中所选的eventloop中运行
   ioLoop->runInLoop(boost::bind(&TcpConnection::connectEstablished, conn));
 }
 

@@ -29,8 +29,8 @@ namespace detail
 {
 
 int createTimerfd()
-{
-  int timerfd = ::timerfd_create(CLOCK_MONOTONIC,
+{//生成一个定时器对象
+  int timerfd = ::timerfd_create(CLOCK_MONOTONIC,//绝对时间为准，获取的时间为系统重启到现在的时间
                                  TFD_NONBLOCK | TFD_CLOEXEC);
   if (timerfd < 0)
   {
@@ -39,7 +39,7 @@ int createTimerfd()
   return timerfd;
 }
 
-struct timespec howMuchTimeFromNow(Timestamp when)
+struct timespec howMuchTimeFromNow(Timestamp when)//现在距离超时时间when还有多久
 {
   int64_t microseconds = when.microSecondsSinceEpoch()
                          - Timestamp::now().microSecondsSinceEpoch();
@@ -97,7 +97,7 @@ TimerQueue::TimerQueue(EventLoop* loop)
     callingExpiredTimers_(false)
 {
   timerfdChannel_.setReadCallback(
-      boost::bind(&TimerQueue::handleRead, this));
+      boost::bind(&TimerQueue::handleRead, this));//channel::handleRead() will callback TimeQueue::handleRead()
   // we are always reading the timerfd, we disarm it with timerfd_settime.
   timerfdChannel_.enableReading();
 }
@@ -115,9 +115,9 @@ TimerQueue::~TimerQueue()
   }
 }
 
-TimerId TimerQueue::addTimer(const TimerCallback& cb,
-                             Timestamp when,
-                             double interval)
+TimerId TimerQueue::addTimer(const TimerCallback& cb,//超时回调
+                             Timestamp when,//超时时间
+                             double interval)//重复时间
 {
   Timer* timer = new Timer(cb, when, interval);
   loop_->runInLoop(

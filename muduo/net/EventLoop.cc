@@ -110,6 +110,7 @@ void EventLoop::loop()
   while (!quit_)
   {
     activeChannels_.clear();
+    // 1.监听并获取待处理的事件，把这些事件放在aciveChannels中
     pollReturnTime_ = poller_->poll(kPollTimeMs, &activeChannels_);
     ++iteration_;
     if (Logger::logLevel() <= Logger::TRACE)
@@ -118,6 +119,7 @@ void EventLoop::loop()
     }
     // TODO sort channel by priority
     eventHandling_ = true;
+    // 2.循环处理所有activeChannels_中的事件
     for (ChannelList::iterator it = activeChannels_.begin();
         it != activeChannels_.end(); ++it)
     {
@@ -126,6 +128,7 @@ void EventLoop::loop()
     }
     currentActiveChannel_ = NULL;
     eventHandling_ = false;
+    // 3.处理完了IO事件之后，处理等待在队列中的任务
     doPendingFunctors();
   }
 
@@ -175,18 +178,18 @@ size_t EventLoop::queueSize() const
   MutexLockGuard lock(mutex_);
   return pendingFunctors_.size();
 }
-
+//runAt 在指定的时间调用 TimerCallback
 TimerId EventLoop::runAt(const Timestamp& time, const TimerCallback& cb)
 {
   return timerQueue_->addTimer(cb, time, 0.0);
 }
-
+//runAfter 等一段时间调用 TimerCallback
 TimerId EventLoop::runAfter(double delay, const TimerCallback& cb)
 {
   Timestamp time(addTime(Timestamp::now(), delay));
   return runAt(time, cb);
 }
-
+//runEvery 以固定的间隔反复调用 TimerCallback
 TimerId EventLoop::runEvery(double interval, const TimerCallback& cb)
 {
   Timestamp time(addTime(Timestamp::now(), interval));

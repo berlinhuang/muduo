@@ -34,7 +34,8 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& listenAddr, bool reusepor
   acceptSocket_.setReuseAddr(true);
   acceptSocket_.setReusePort(reuseport);
   acceptSocket_.bindAddress(listenAddr);
-  acceptChannel_.setReadCallback(
+  //设置acceptChannel_的读事件处理函数
+  acceptChannel_.setReadCallback(//readCallback_ = &Acceptor::handleRead
       boost::bind(&Acceptor::handleRead, this));
 }
 
@@ -58,6 +59,7 @@ void Acceptor::handleRead()
   loop_->assertInLoopThread();
   InetAddress peerAddr;
   //FIXME loop until no more
+  //1. 获取新建连接的描述符 Socket acceptSocket_;
   int connfd = acceptSocket_.accept(&peerAddr);
   if (connfd >= 0)
   {
@@ -65,6 +67,8 @@ void Acceptor::handleRead()
     // LOG_TRACE << "Accepts of " << hostport;
     if (newConnectionCallback_)
     {
+      //2. 分发连接 由TcpServer提供
+      //TcpServer构造的时候设置acceptor_->setNewConnectionCallback( boost::bind(&TcpServer::newConnection, this, _1, _2));
       newConnectionCallback_(connfd, peerAddr);
     }
     else

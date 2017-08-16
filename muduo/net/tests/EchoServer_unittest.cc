@@ -20,6 +20,8 @@ int numThreads = 0;
 class EchoServer
 {
  public:
+//对自由方法来说,直接boost::bind(函数名, 参数1，参数2，...)
+//对类方法来说，直接boost::bind(&类名::方法名，类实例指针，参数1，参数2）
   EchoServer(EventLoop* loop, const InetAddress& listenAddr)
     : loop_(loop),
       server_(loop, listenAddr, "EchoServer")

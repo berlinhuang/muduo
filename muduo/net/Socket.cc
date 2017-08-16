@@ -72,7 +72,7 @@ int Socket::accept(InetAddress* peeraddr)
 {
   struct sockaddr_in6 addr;
   bzero(&addr, sizeof addr);
-  int connfd = sockets::accept(sockfd_, &addr);
+  int connfd = sockets::accept(sockfd_, &addr);//get client address
   if (connfd >= 0)
   {
     peeraddr->setSockAddrInet6(addr);

@@ -37,7 +37,7 @@ class Singleton : boost::noncopyable
  public:
   static T& instance()
   {
-    pthread_once(&ponce_, &Singleton::init);
+    pthread_once(&ponce_, &Singleton::init);// make sure that Singleton::init() just execute once
     assert(value_ != NULL);
     return *value_;
   }
@@ -48,10 +48,10 @@ class Singleton : boost::noncopyable
 
   static void init()
   {
-    value_ = new T();
-    if (!detail::has_no_destroy<T>::value)
+    value_ = new T();//直接调用构造函数
+    if (!detail::has_no_destroy<T>::value)//当参数是类且没有"no_destroy"方法才会注册atexit的destroy
     {
-      ::atexit(destroy);
+      ::atexit(destroy);// 注册一个销毁函数
     }
   }
 

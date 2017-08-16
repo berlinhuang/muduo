@@ -88,8 +88,8 @@ class AtomicIntegerT : boost::noncopyable
 };
 }
 
-typedef detail::AtomicIntegerT<int32_t> AtomicInt32;
-typedef detail::AtomicIntegerT<int64_t> AtomicInt64;
+typedef detail::AtomicIntegerT<int32_t> AtomicInt32;// 32位整数的实例化
+typedef detail::AtomicIntegerT<int64_t> AtomicInt64;// 64位整数的实例化
 }
 
 #endif  // MUDUO_BASE_ATOMIC_H

@@ -45,6 +45,19 @@ static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;
 //         uint32_t        sin6_scope_id; /* IPv6 scope-id */
 //     };
 
+// sa_family_t:
+// IPv4                 -> AF_INET
+// IPv6                 -> AF_INET6
+// Unix Domain Socket   -> AF_UNIX
+
+// struct sockaddr{
+//    sa_family_t   sa_family;
+//    char          sa_data[4];     /* 14 bytes of protocol address */
+// };
+
+// struct sockaddr_in
+// struct sockaddr_in6
+
 using namespace muduo;
 using namespace muduo::net;
 

@@ -39,15 +39,15 @@ set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -finline-limit=1000 -DNDEBUG")
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-
+#在系统中自动查找配置构建工程所需的程序库 REQUIRED表示如果没有找到，cmake会停止处理，并报告一个错误
 find_package(Boost REQUIRED)
 find_package(Protobuf)
 find_package(CURL)
 find_package(ZLIB)
-find_path(CARES_INCLUDE_DIR ares.h)
-find_library(CARES_LIBRARY NAMES cares)
+find_path(CARES_INCLUDE_DIR ares.h)#查找ares.h，如果找到则把目录名赋给CARES_INCLUDE_DIR
+find_library(CARES_LIBRARY NAMES cares)#查找libcares.so,找到则把库文件的绝对路径赋给CARES_LIBRARY
 find_path(MHD_INCLUDE_DIR microhttpd.h)
-find_library(MHD_LIBRARY NAMES microhttpd)
+find_library(MHD_LIBRARY NAMES microhttpd)#查找libmicrohttpd.so
 find_library(BOOSTTEST_LIBRARY NAMES boost_unit_test_framework)
 find_library(BOOSTPO_LIBRARY NAMES boost_program_options)
 find_path(TCMALLOC_INCLUDE_DIR gperftools/heap-profiler.h)
@@ -84,12 +84,13 @@ endif()
 if(THRIFT_COMPILER AND THRIFT_INCLUDE_DIR AND THRIFT_LIBRARY)
   message(STATUS "found thrift")
 endif()
-
+#message(${Boost_INCLUDE_DIRS})#/usr/include
 include_directories(${Boost_INCLUDE_DIRS})
-
+#message(${PROJECT_SOURCE_DIR})#/home/berlin/code/github/muduo
 include_directories(${PROJECT_SOURCE_DIR})
-
+#message(${CMAKE_BUILD_TYPE})#Release
 string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+#message(${BUILD_TYPE})#RELEASE
 message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})
 
 add_subdirectory(muduo/base)

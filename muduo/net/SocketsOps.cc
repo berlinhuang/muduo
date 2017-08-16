@@ -224,8 +224,8 @@ void sockets::fromIpPort(const char* ip, uint16_t port,
                          struct sockaddr_in* addr)
 {
   addr->sin_family = AF_INET;
-  addr->sin_port = hostToNetwork16(port);
-  if (::inet_pton(AF_INET, ip, &addr->sin_addr) <= 0)
+  addr->sin_port = hostToNetwork16(port);//主机序转成网络字节序
+  if (::inet_pton(AF_INET, ip, &addr->sin_addr) <= 0)//presentation to numeric
   {
     LOG_SYSERR << "sockets::fromIpPort";
   }

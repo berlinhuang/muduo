@@ -59,7 +59,7 @@ EventLoop* EventLoopThreadPool::getNextLoop()
   baseLoop_->assertInLoopThread();
   assert(started_);
   EventLoop* loop = baseLoop_;
-
+  // std::vector<EventLoop*> loops_;
   if (!loops_.empty())
   {
     // round-robin

@@ -24,7 +24,7 @@ class Thread : boost::noncopyable
 
   explicit Thread(const ThreadFunc&, const string& name = string());
 #ifdef __GXX_EXPERIMENTAL_CXX0X__
-  explicit Thread(ThreadFunc&&, const string& name = string());
+  explicit Thread(ThreadFunc&&, const string& name = string());//右值引用，在对象返回的时候不会拷贝构造临时对象，而是和临时对象交换，提高了效率
 #endif
   ~Thread();
 

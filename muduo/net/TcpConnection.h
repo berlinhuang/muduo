@@ -87,6 +87,8 @@ class TcpConnection : boost::noncopyable,
   boost::any* getMutableContext()
   { return &context_; }
 
+  // TcpServer.cc connectionCallback_(defaultConnectionCallback),
+  // TcpServer.cc conn->setConnectionCallback(connectionCallback_);
   void setConnectionCallback(const ConnectionCallback& cb)
   { connectionCallback_ = cb; }
 

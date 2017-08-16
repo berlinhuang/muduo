@@ -57,7 +57,7 @@ Timestamp EPollPoller::poll(int timeoutMs, ChannelList* activeChannels)
 {
   LOG_TRACE << "fd total count " << channels_.size();
   int numEvents = ::epoll_wait(epollfd_,
-                               &*events_.begin(),
+                               &*events_.begin(),// std::vector<struct epoll_event>
                                static_cast<int>(events_.size()),
                                timeoutMs);
   int savedErrno = errno;
@@ -87,6 +87,21 @@ Timestamp EPollPoller::poll(int timeoutMs, ChannelList* activeChannels)
   return now;
 }
 
+/*
+ * struct epoll_event{
+ *    __uint32_t     events;// epoll事件表 EPOLLIN
+ *    epoll_data_t   data;  // user data
+ * }
+ *
+ * typedef union epoll_data{
+ *    void*     ptr;
+ *    int       fd;
+ *    uint32_t  u32;
+ *    uint64_t  u64;
+ * }epoll_data_t;
+ *
+ *
+*/
 void EPollPoller::fillActiveChannels(int numEvents,
                                      ChannelList* activeChannels) const
 {

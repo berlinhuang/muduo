@@ -61,6 +61,7 @@ class ThreadNameInitializer
 
 ThreadNameInitializer init;
 
+//线程数据类，观察者模式
 struct ThreadData
 {
   typedef muduo::Thread::ThreadFunc ThreadFunc;
