@@ -14,7 +14,7 @@
 namespace muduo
 {
 
-template<typename T>
+template<typename T>//线程局部类
 class ThreadLocal : boost::noncopyable
 {
  public:

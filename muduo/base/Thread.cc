@@ -92,10 +92,10 @@ struct ThreadData
     ::prctl(PR_SET_NAME, muduo::CurrentThread::t_threadName);
     try
     {
-      func_();
+      func_();//运行线程运行函数
       muduo::CurrentThread::t_threadName = "finished";
     }
-    catch (const Exception& ex)
+    catch (const Exception& ex)//Exception
     {
       muduo::CurrentThread::t_threadName = "crashed";
       fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
@@ -103,14 +103,14 @@ struct ThreadData
       fprintf(stderr, "stack trace: %s\n", ex.stackTrace());
       abort();
     }
-    catch (const std::exception& ex)
+    catch (const std::exception& ex) //标准异常
     {
       muduo::CurrentThread::t_threadName = "crashed";
       fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
       fprintf(stderr, "reason: %s\n", ex.what());
       abort();
     }
-    catch (...)
+    catch (...) //其他
     {
       muduo::CurrentThread::t_threadName = "crashed";
       fprintf(stderr, "unknown exception caught in Thread %s\n", name_.c_str());
@@ -222,3 +222,5 @@ int Thread::join()
   return pthread_join(pthreadId_, NULL);
 }
 
+// pid  pid_t       getpid()
+// tid  pthread_t   pthread_create()

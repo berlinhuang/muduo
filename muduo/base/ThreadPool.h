@@ -50,15 +50,15 @@ class ThreadPool : boost::noncopyable
  private:
   bool isFull() const;
   void runInThread();
-  Task take();
+  Task take();  //取任务函数
 
   mutable MutexLock mutex_;
   Condition notEmpty_;
   Condition notFull_;
   string name_;
   Task threadInitCallback_;
-  boost::ptr_vector<muduo::Thread> threads_;
-  std::deque<Task> queue_;
+  boost::ptr_vector<muduo::Thread> threads_;//线程数组
+  std::deque<Task> queue_; //任务队列
   size_t maxQueueSize_;
   bool running_;
 };

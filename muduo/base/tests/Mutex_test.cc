@@ -50,7 +50,7 @@ int main()
   }
 
   const int kMaxThreads = 8;
-  g_vec.reserve(kMaxThreads * kCount);
+  g_vec.reserve(kMaxThreads * kCount);//预留8千万个整数(这个所占的内存空间有300多M)
 
   Timestamp start(Timestamp::now());
   for (int i = 0; i < kCount; ++i)

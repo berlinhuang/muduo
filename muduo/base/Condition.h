@@ -28,6 +28,7 @@ class Condition : boost::noncopyable
     MCHECK(pthread_cond_destroy(&pcond_));
   }
 
+//wait
   void wait()
   {
     MutexLock::UnassignGuard ug(mutex_);
@@ -37,11 +38,13 @@ class Condition : boost::noncopyable
   // returns true if time out, false otherwise.
   bool waitForSeconds(double seconds);
 
+//signal
   void notify()
   {
     MCHECK(pthread_cond_signal(&pcond_));
   }
 
+//broadcast
   void notifyAll()
   {
     MCHECK(pthread_cond_broadcast(&pcond_));
@@ -49,7 +52,7 @@ class Condition : boost::noncopyable
 
  private:
   MutexLock& mutex_;
-  pthread_cond_t pcond_;
+  pthread_cond_t pcond_;//为一个条件变量
 };
 
 }

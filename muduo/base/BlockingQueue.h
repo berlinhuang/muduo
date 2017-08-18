@@ -27,7 +27,7 @@ class BlockingQueue : boost::noncopyable
   {
   }
 
-  void put(const T& x)
+  void put(const T& x)//往阻塞队列放任务
   {
     MutexLockGuard lock(mutex_);
     queue_.push_back(x);
@@ -45,7 +45,7 @@ class BlockingQueue : boost::noncopyable
   // FIXME: emplace()
 #endif
 
-  T take()
+  T take()  //取任务
   {
     MutexLockGuard lock(mutex_);
     // always use a while-loop, due to spurious wakeup

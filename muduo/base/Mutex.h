@@ -54,7 +54,7 @@ class MutexLock : boost::noncopyable
   MutexLock()
     : holder_(0)
   {
-    MCHECK(pthread_mutex_init(&mutex_, NULL));
+    MCHECK(pthread_mutex_init(&mutex_, NULL));//MEMCHECK是多retval的检测，相当于assert，下同
   }
 
   ~MutexLock()
@@ -64,7 +64,7 @@ class MutexLock : boost::noncopyable
   }
 
   // must be called when locked, i.e. for assertion
-  bool isLockedByThisThread() const
+  bool isLockedByThisThread() const//是否当前线程拥有该锁
   {
     return holder_ == CurrentThread::tid();
   }
@@ -79,7 +79,7 @@ class MutexLock : boost::noncopyable
   void lock()
   {
     MCHECK(pthread_mutex_lock(&mutex_));
-    assignHolder();
+    assignHolder(); //赋值，赋上tid
   }
 
   void unlock()
@@ -87,7 +87,7 @@ class MutexLock : boost::noncopyable
     unassignHolder();
     MCHECK(pthread_mutex_unlock(&mutex_));
   }
-
+ //获取threadMutex对象
   pthread_mutex_t* getPthreadMutex() /* non-const */
   {
     return &mutex_;
@@ -121,7 +121,7 @@ class MutexLock : boost::noncopyable
 
   void assignHolder()
   {
-    holder_ = CurrentThread::tid();
+    holder_ = CurrentThread::tid();//将当前线程的tid保存至holder_
   }
 
   pthread_mutex_t mutex_;
@@ -134,6 +134,7 @@ class MutexLock : boost::noncopyable
 //   MutexLockGuard lock(mutex_);
 //   return data_.size();
 // }
+    //MutexLockGuard类使用RAII技法封装，在实际应用中这个类更常用
 class MutexLockGuard : boost::noncopyable
 {
  public:
@@ -150,7 +151,7 @@ class MutexLockGuard : boost::noncopyable
 
  private:
 
-  MutexLock& mutex_;
+  MutexLock& mutex_;//整个对象结束的时候mutex_并没有结束(引用)
 };
 
 }

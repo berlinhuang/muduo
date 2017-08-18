@@ -29,7 +29,7 @@ class Test
   void run(int times)
   {
     printf("waiting for count down latch\n");
-    latch_.wait();
+    latch_.wait();//wait all threads started
     printf("all threads started\n");
     for (int i = 0; i < times; ++i)
     {

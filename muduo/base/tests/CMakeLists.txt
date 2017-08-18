@@ -7,6 +7,9 @@ add_test(NAME atomic_unittest COMMAND atomic_unittest)
 add_executable(blockingqueue_test BlockingQueue_test.cc)
 target_link_libraries(blockingqueue_test muduo_base)
 
+add_executable(myblockingqueue_test MyBlockingQueue_test.cc)
+target_link_libraries(myblockingqueue_test muduo_base)
+
 add_executable(blockingqueue_cpp11_test BlockingQueue_test.cc)
 target_link_libraries(blockingqueue_cpp11_test muduo_base_cpp11)
 set_target_properties(blockingqueue_cpp11_test PROPERTIES COMPILE_FLAGS "-std=c++0x")
