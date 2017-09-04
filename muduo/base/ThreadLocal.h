@@ -10,6 +10,12 @@
 
 #include <boost/noncopyable.hpp>
 #include <pthread.h>
+//提供线程私有的全局变量  线程特定数据(Thread-specific Data，或TSD)
+//POSIX线程库通过四个函数操作线程特定数据，分别是
+// pthread_key_create，
+// pthread_key_delete，
+// pthread_getspecific，
+// pthread_setspecific
 
 namespace muduo
 {
@@ -27,7 +33,7 @@ class ThreadLocal : boost::noncopyable
   {
     MCHECK(pthread_key_delete(pkey_));
   }
-
+//获取线程特定数据
   T& value()
   {
     T* perThreadValue = static_cast<T*>(pthread_getspecific(pkey_));
