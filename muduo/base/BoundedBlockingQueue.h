@@ -17,7 +17,7 @@ namespace muduo
 {
 
 template<typename T>
-class BoundedBlockingQueue : boost::noncopyable
+class BoundedBlockingQueue : boost::noncopyable//有界的阻塞队列
 {
  public:
   explicit BoundedBlockingQueue(int maxSize)
