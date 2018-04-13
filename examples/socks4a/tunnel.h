@@ -31,14 +31,9 @@ class Tunnel : public boost::enable_shared_from_this<Tunnel>,
 
   void setup()
   {
-    client_.setConnectionCallback(
-        boost::bind(&Tunnel::onClientConnection, shared_from_this(), _1));
-    client_.setMessageCallback(
-        boost::bind(&Tunnel::onClientMessage, shared_from_this(), _1, _2, _3));
-    serverConn_->setHighWaterMarkCallback(
-        boost::bind(&Tunnel::onHighWaterMarkWeak,
-                    boost::weak_ptr<Tunnel>(shared_from_this()), kServer, _1, _2),
-        1024*1024);
+    client_.setConnectionCallback(  boost::bind(&Tunnel::onClientConnection, shared_from_this(), _1));
+    client_.setMessageCallback( boost::bind(&Tunnel::onClientMessage, shared_from_this(), _1, _2, _3));
+    serverConn_->setHighWaterMarkCallback( boost::bind(&Tunnel::onHighWaterMarkWeak, boost::weak_ptr<Tunnel>(shared_from_this()), kServer, _1, _2),   1024*1024);
   }
 
   void connect()
@@ -71,10 +66,7 @@ class Tunnel : public boost::enable_shared_from_this<Tunnel>,
     if (conn->connected())
     {
       conn->setTcpNoDelay(true);
-      conn->setHighWaterMarkCallback(
-          boost::bind(&Tunnel::onHighWaterMarkWeak,
-                      boost::weak_ptr<Tunnel>(shared_from_this()), kClient, _1, _2),
-          1024*1024);
+      conn->setHighWaterMarkCallback( boost::bind(&Tunnel::onHighWaterMarkWeak, boost::weak_ptr<Tunnel>(shared_from_this()), kClient, _1, _2), 1024*1024);
       serverConn_->setContext(conn);
       serverConn_->startRead();
       clientConn_ = conn;
@@ -89,9 +81,7 @@ class Tunnel : public boost::enable_shared_from_this<Tunnel>,
     }
   }
 
-  void onClientMessage(const muduo::net::TcpConnectionPtr& conn,
-                       muduo::net::Buffer* buf,
-                       muduo::Timestamp)
+  void onClientMessage(const muduo::net::TcpConnectionPtr& conn, muduo::net::Buffer* buf, muduo::Timestamp)
   {
     LOG_DEBUG << conn->name() << " " << buf->readableBytes();
     if (serverConn_)
@@ -110,9 +100,7 @@ class Tunnel : public boost::enable_shared_from_this<Tunnel>,
     kServer, kClient
   };
 
-  void onHighWaterMark(ServerClient which,
-                       const muduo::net::TcpConnectionPtr& conn,
-                       size_t bytesToSent)
+  void onHighWaterMark(ServerClient which, const muduo::net::TcpConnectionPtr& conn, size_t bytesToSent)
   {
     LOG_INFO << (which == kServer ? "server" : "client")
              << " onHighWaterMark " << conn->name()

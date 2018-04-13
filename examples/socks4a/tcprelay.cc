@@ -36,8 +36,7 @@ void onServerMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp)
   LOG_DEBUG << buf->readableBytes();
   if (!conn->getContext().empty())
   {
-    const TcpConnectionPtr& clientConn
-      = boost::any_cast<const TcpConnectionPtr&>(conn->getContext());
+    const TcpConnectionPtr& clientConn  = boost::any_cast<const TcpConnectionPtr&>(conn->getContext());
     clientConn->send(buf);
   }
 }
@@ -49,6 +48,7 @@ void memstat()
 
 int main(int argc, char* argv[])
 {
+  Logger::setLogLevel(Logger::DEBUG);
   if (argc < 4)
   {
     fprintf(stderr, "Usage: %s <host_ip> <port> <listen_port>\n", argv[0]);

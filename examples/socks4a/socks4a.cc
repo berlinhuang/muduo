@@ -44,8 +44,13 @@ void onServerMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp)
       const char* where = std::find(begin, end, '\0');
       if (where != end)
       {
-        char ver = buf->peek()[0];
-        char cmd = buf->peek()[1];
+        char ver = buf->peek()[0];//VER是SOCKS版本，这里应该是0x04
+        char cmd = buf->peek()[1];//CMD是SOCK的命令码
+        /**
+         * 0x01表示CONNECT请求
+         * 0x02表示BIND请求
+         * 0x03表示UDP转发
+        */
         const void* port = buf->peek() + 2;
         const void* ip = buf->peek() + 4;
 
