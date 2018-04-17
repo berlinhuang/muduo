@@ -28,7 +28,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& listenAddr, bool reusepor
     acceptSocket_(sockets::createNonblockingOrDie(listenAddr.family())),
     acceptChannel_(loop, acceptSocket_.fd()),
     listenning_(false),
-    idleFd_(::open("/dev/null", O_RDONLY | O_CLOEXEC))
+    idleFd_(::open("/dev/null", O_RDONLY | O_CLOEXEC))//重定向到/dev/null的意思
 {
   assert(idleFd_ >= 0);
   acceptSocket_.setReuseAddr(true);
@@ -84,9 +84,11 @@ void Acceptor::handleRead()
     // By Marc Lehmann, author of libev.
     if (errno == EMFILE)
     {
-      ::close(idleFd_);
+      ::close(idleFd_);//close 事先准备的一个空闲文件描述符 获得一个文件描述符名额
+      //再accept拿到一个socket连接的文件描述符，随后立刻close 优雅的断开了与客户端的连接
       idleFd_ = ::accept(acceptSocket_.fd(), NULL, NULL);
       ::close(idleFd_);
+      // 最后重新打开空闲文件
       idleFd_ = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
     }
   }

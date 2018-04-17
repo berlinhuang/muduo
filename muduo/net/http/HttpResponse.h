@@ -7,7 +7,7 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 //
 // This is a public header file, it must only include public header files.
-
+// 按照不同的请求方法、类型等构造响应, 将响应实体保存到Buffer对象中
 #ifndef MUDUO_NET_HTTP_HTTPRESPONSE_H
 #define MUDUO_NET_HTTP_HTTPRESPONSE_H
 

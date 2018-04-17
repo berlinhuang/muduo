@@ -37,11 +37,10 @@ int main(int argc, char* argv[])
     muduo::net::EventLoop loop;
     muduo::net::InetAddress listenAddr(port);
     muduo::net::TcpServer server(&loop, listenAddr, "PingPong");
-    LengthHeaderCodec codec(boost::bind(onStringMessage, &codec, _1, _2, _3));
+    LengthHeaderCodec codec(boost::bind(onStringMessage, &codec, _1, _2, _3));// LengthHeaderCodec::onMessage will go through onStringMessage
 
     server.setConnectionCallback(onConnection);
-    server.setMessageCallback(
-        boost::bind(&LengthHeaderCodec::onMessage, &codec, _1, _2, _3));
+    server.setMessageCallback( boost::bind(&LengthHeaderCodec::onMessage, &codec, _1, _2, _3)); //net message will go through LengthHeaderCodec::onMessage
 
     if (threadCount > 1)
     {

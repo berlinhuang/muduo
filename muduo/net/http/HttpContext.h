@@ -8,6 +8,7 @@
 //
 // This is an internal header file, you should not include this.
 
+//接收客户请求（这里为Http请求），并解析请求
 #ifndef MUDUO_NET_HTTP_HTTPCONTEXT_H
 #define MUDUO_NET_HTTP_HTTPCONTEXT_H
 

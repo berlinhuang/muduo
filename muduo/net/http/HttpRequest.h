@@ -8,6 +8,8 @@
 //
 // This is a public header file, it must only include public header files.
 
+//将HttpContext 解析出来的消息保存到了HttpRequest对象中
+
 #ifndef MUDUO_NET_HTTP_HTTPREQUEST_H
 #define MUDUO_NET_HTTP_HTTPREQUEST_H
 

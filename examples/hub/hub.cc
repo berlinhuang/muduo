@@ -74,10 +74,8 @@ class PubSubServer : boost::noncopyable
     : loop_(loop),
       server_(loop, listenAddr, "PubSubServer")
   {
-    server_.setConnectionCallback(
-        boost::bind(&PubSubServer::onConnection, this, _1));
-    server_.setMessageCallback(
-        boost::bind(&PubSubServer::onMessage, this, _1, _2, _3));
+    server_.setConnectionCallback( boost::bind(&PubSubServer::onConnection, this, _1));
+    server_.setMessageCallback( boost::bind(&PubSubServer::onMessage, this, _1, _2, _3));
     loop_->runEvery(1.0, boost::bind(&PubSubServer::timePublish, this));
   }
 
@@ -95,11 +93,9 @@ class PubSubServer : boost::noncopyable
     }
     else
     {
-      const ConnectionSubscription& connSub
-        = boost::any_cast<const ConnectionSubscription&>(conn->getContext());
+      const ConnectionSubscription& connSub = boost::any_cast<const ConnectionSubscription&>(conn->getContext());
       // subtle: doUnsubscribe will erase *it, so increase before calling.
-      for (ConnectionSubscription::const_iterator it = connSub.begin();
-           it != connSub.end();)
+      for (ConnectionSubscription::const_iterator it = connSub.begin(); it != connSub.end();)
       {
         doUnsubscribe(conn, *it++);
       }

@@ -77,10 +77,8 @@ int main(int argc, char* argv[])
     muduo::net::InetAddress serverAddr(ip, port);
     muduo::net::TcpClient client(&loop, serverAddr, "Client");
     LengthHeaderCodec codec(boost::bind(onStringMessage, &codec, _1, _2, _3));
-    client.setConnectionCallback(
-        boost::bind(onConnection, &codec, _1));
-    client.setMessageCallback(
-        boost::bind(&LengthHeaderCodec::onMessage, &codec, _1, _2, _3));
+    client.setConnectionCallback( boost::bind(onConnection, &codec, _1));
+    client.setMessageCallback( boost::bind(&LengthHeaderCodec::onMessage, &codec, _1, _2, _3));
     client.connect();
     loop.loop();
   }
